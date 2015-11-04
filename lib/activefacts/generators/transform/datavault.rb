@@ -2,6 +2,15 @@
 #       Data Vault Transform
 #       Transform a loaded ActiveFacts vocabulary to suit Data Vault
 #
+# ToDo:
+#   optionally emit load tables and use audit links to those
+#   optionally emit Reference tables (but with no FK enforcement)
+#   handle slow-changing ref-tables?
+#   comment peg-legged links (where a Link has a non-hub it its key)
+#   transform links to links into links to the underying hubs
+#   consider John Giles' subtype handling
+#   consider using guaranteed temporal no-overlap handling
+#
 # Copyright (c) 2015 Infinuendo. Read the LICENSE file.
 #
 require 'activefacts/metamodel'

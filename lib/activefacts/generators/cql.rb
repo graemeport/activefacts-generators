@@ -368,7 +368,8 @@ module ActiveFacts
         if role_proximity == :proximate
           verbaliser.role_refs_have_subtype_steps(c.role_sequence)
         else
-          join_over, joined_roles = ActiveFacts::Metamodel.plays_over(c.role_sequence.all_role_ref.map{|rr|rr.role}, role_proximity)
+	  roles = c.role_sequence.all_role_ref.map{|rr|rr.role}
+          join_over, joined_roles = ActiveFacts::Metamodel.plays_over(roles, role_proximity)
           verbaliser.roles_have_same_player(joined_roles) if join_over
         end
 

@@ -82,6 +82,8 @@ module ActiveFacts
               /^Signed ?Small ?Integer$/,
               /^Unsigned ?Tiny ?Integer$/
               s = case
+		when length == nil
+		  'int'
                 when length <= 8
                   'tinyint'
                 when length <= 16

@@ -150,7 +150,7 @@ module ActiveFacts
 		  ]+
 		  Array(
 		    # Index it non-uniquely only if it's not unique already:
-		    fk.jump_reference.to_role.unique ? nil :
+		    fk.jump_reference.to_role.is_unique ? nil :
 		      "    add_index :#{fk.from.rails_name}, [:#{from_columns[0]}], :unique => false, :name => :#{index_name}"
 		  )
 		else

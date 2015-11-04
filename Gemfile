@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in activefacts-generators.gemspec
 gemspec
 
-if ENV['PWD'] =~ %r{\A/Users/cjh/work/activefacts}
+if ENV['PWD'] =~ %r{\A#{ENV['HOME']}/work}
+  $stderr.puts "Using work area gems for #{File.basename(File.dirname(__FILE__))} from activefacts-generators"
   gem 'activefacts-api', path: '/Users/cjh/work/activefacts/api'
   gem 'activefacts-metamodel', path: '/Users/cjh/work/activefacts/metamodel'
   # gem 'activefacts-metamodel', git: 'git://github.com/cjheath/activefacts-metamodel.git'
