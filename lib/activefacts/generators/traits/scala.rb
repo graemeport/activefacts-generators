@@ -9,7 +9,7 @@ module ActiveFacts
   module Generators
     module ScalaTraits
       module Vocabulary
-	def prelude
+	def scala_prelude
 	  title_name = name.words.titlecase
 
 	  "package model\n"+
@@ -24,13 +24,13 @@ module ActiveFacts
 	  "\n"
 	end
 
-	def prelude_metamodel
+	def scala_prelude_metamodel
 	  title_name = name.words.titlecase
 	  "class #{title_name}Model extends FBMModel with LocalStorageConstellation {\n" +
 	  "  implicit val constellation: Constellation = this\n"
 	end
 
-	def finale
+	def scala_finale
 	  "}\n"+
 	  "\n"
 	end
@@ -55,13 +55,13 @@ module ActiveFacts
             end.
             sort_by do |role|
               r = role.fact_type.all_role.select{|r2| r2 != role}[0] || role
-              r.preferred_role_name(self) + ':' + role.preferred_role_name(r.object_type)
+              r.scala_preferred_role_name(self) + ':' + role.scala_preferred_role_name(r.object_type)
             end
         end
       end
 
       module Role
-        def preferred_role_name(is_for = nil, &name_builder)
+        def scala_preferred_role_name(is_for = nil, &name_builder)
 	  # REVISIT: Modify this to suit Scala
 
 	  if fact_type.is_a?(ActiveFacts::Metamodel::TypeInheritance)
@@ -114,7 +114,7 @@ module ActiveFacts
 	  return if fact_type.entity_type
 
 	  if fact_type.all_role.size == 1
-	    scala_role_name = preferred_role_name.words.camelcase
+	    scala_role_name = scala_preferred_role_name.words.camelcase
 	    return "    val #{scala_role_name}: Boolean"
 	  elsif fact_type.all_role.size != 2
 	    # Shouldn't come here, except perhaps for an invalid model
@@ -124,7 +124,7 @@ module ActiveFacts
 	  return if fact_type.is_a?(ActiveFacts::Metamodel::TypeInheritance)
 
 	  other_role = fact_type.all_role.select{|r| r != self}[0]
-	  other_role_name = other_role.preferred_role_name
+	  other_role_name = other_role.scala_preferred_role_name
 	  scala_role_name = other_role_name.words.camelcase
 	  other_type_name = other_role.object_type.name.words.titlecase
 
@@ -336,7 +336,7 @@ END
 	  id_roles.map do |role|
 	    # Ignore identification through a supertype
 	    next if role.fact_type.kind_of?(ActiveFacts::Metamodel::TypeInheritance)
-	    role.preferred_role_name(self).words.camelcase
+	    role.scala_preferred_role_name(self).words.camelcase
 	  end.compact
 	end
 
@@ -393,7 +393,7 @@ END
           # Dump a non-objectified fact type
           name_words = scala_name
           role_names = preferred_reading.role_sequence.all_role_ref_in_order.map do |rr|
-              rr.role.preferred_role_name.words.camelcase
+              rr.role.scala_preferred_role_name.words.camelcase
             end
           role_types = preferred_reading.role_sequence.all_role_ref_in_order.map do |rr|
               rr.role.object_type.name.words.camelcase
@@ -408,7 +408,7 @@ END
         def scala_metamodel
           name_words = scala_name
           role_names = preferred_reading.role_sequence.all_role_ref_in_order.map do |rr|
-              rr.role.preferred_role_name.words.camelcase
+              rr.role.scala_preferred_role_name.words.camelcase
             end
           "  val #{name_words.camelcase} = assertEntity(FBMModel.BinaryFactType(FBMModel.FactTypeName(\"#{name_words.titlecase}\"), (#{role_names*', '})))\n"
         end
@@ -417,10 +417,10 @@ END
         def fact_roles
 	  raise "Fact #{describe} type is not objectified" unless entity_type
           all_role.sort_by do |role|
-	    role.preferred_role_name(entity_type)
+	    role.scala_preferred_role_name(entity_type)
 	  end.
 	  map do |role| 
-	    role_name = role.preferred_role_name(entity_type)
+	    role_name = role.scala_preferred_role_name(entity_type)
 	    one_to_one = role.all_role_ref.detect{|rr|
 	      rr.role_sequence.all_role_ref.size == 1 &&
 	      rr.role_sequence.all_presence_constraint.detect{|pc|

@@ -46,13 +46,13 @@ module ActiveFacts
       end
 
       def vocabulary_start
-        puts @vocabulary.prelude
+        puts @vocabulary.scala_prelude
 
-        @metamodel = @vocabulary.prelude_metamodel
+        @metamodel = @vocabulary.scala_prelude_metamodel
       end
 
       def vocabulary_end
-	puts @vocabulary.finale
+	puts @vocabulary.scala_finale
         puts "#{@metamodel}\n}\n"
       end
 
@@ -66,22 +66,22 @@ module ActiveFacts
       end
 
       def id_role_names o, id_roles
-	id_roles.map do |role|
-	  # Ignore identification through a supertype
-	  next if role.fact_type.kind_of?(ActiveFacts::Metamodel::TypeInheritance)
-	  role.preferred_role_name(o).words.camelcase
-	end.compact
+        id_roles.map do |role|
+          # Ignore identification through a supertype
+          next if role.fact_type.kind_of?(ActiveFacts::Metamodel::TypeInheritance)
+          role.preferred_role_name(o).words.camelcase
+        end.compact
       end
 
       def id_role_types id_roles
-	id_roles.map do |role|
-	  next if role.fact_type.kind_of?(ActiveFacts::Metamodel::TypeInheritance)
-	  if !role.fact_type.entity_type && role.fact_type.all_role.size == 1
-	    "Boolean"
-	  else
-	    role.object_type.name.words.titlecase
-	  end
-	end.compact
+        id_roles.map do |role|
+          next if role.fact_type.kind_of?(ActiveFacts::Metamodel::TypeInheritance)
+          if !role.fact_type.entity_type && role.fact_type.all_role.size == 1
+            "Boolean"
+          else
+           role.object_type.name.words.titlecase
+          end
+        end.compact
       end
 
       def all_identifying_roles(o)
@@ -142,7 +142,7 @@ module ActiveFacts
 
       def identified_by_roles_and_facts(entity_type, identifying_role_refs, identifying_facts)
         identifying_role_refs.map do |role_ref|
-            [ role_ref.role.preferred_role_name(entity_type),
+            [ role_ref.role.scala_preferred_role_name(entity_type),
               entity_type.name.words.titlecase
             ]
           end
