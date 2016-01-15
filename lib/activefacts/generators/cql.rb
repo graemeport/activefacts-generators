@@ -293,8 +293,9 @@ module ActiveFacts
 
           # Alternate identification of objectified fact type?
           primary_supertype = supertypes[0]
-          pi = fact_type.entity_type.preferred_identifier
-          if pi && primary_supertype && primary_supertype.preferred_identifier != pi
+          if fact_type.all_role.size > 1 and
+	      pi = fact_type.entity_type.preferred_identifier and
+	      primary_supertype && primary_supertype.preferred_identifier != pi
             puts identified_by(o, pi) + ';'
             return
           end
