@@ -210,7 +210,9 @@ module ActiveFacts
           # Here, we must find the role_ref containing the adjectives that we need for each identifier,
           # which will be attached to the uniqueness constraint on this object in the binary FT that
           # attaches that identifying role.
-          identifying_role_refs = pi.role_sequence.all_role_ref.sort_by{|role_ref| role_ref.ordinal}
+          identifying_role_refs =
+	    (o.fact_type && o.fact_type.all_role.size == 1 ? o.fact_type.preferred_reading : pi).
+	      role_sequence.all_role_ref_in_order
 
           # We need to get the adjectives for the roles from the identifying fact's preferred readings:
           identifying_facts = ([o.fact_type]+identifying_role_refs.map{|rr| rr.role.fact_type }).compact.uniq
@@ -336,6 +338,7 @@ module ActiveFacts
           return if skip_fact_type(fact_type)
 
           if (et = fact_type.entity_type) &&
+	      fact_type.all_role.size > 1 &&
               (pi = et.preferred_identifier) &&
               pi.role_sequence.all_role_ref.detect{|rr| rr.role.fact_type != fact_type }
             # trace "Dumping objectified FT #{et.name} as an entity, non-fact PI"
