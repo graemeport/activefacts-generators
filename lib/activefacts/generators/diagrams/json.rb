@@ -46,6 +46,7 @@ module ActiveFacts
 	      if o.is_a?(ActiveFacts::Metamodel::EntityType) and
 		p = o.preferred_identifier and
 		(rrs = p.role_sequence.all_role_ref).size == 1 and
+		!(o.fact_type && o.fact_type.all_role.size == 1) and
 		(r = rrs.single.role).fact_type != o.fact_type and
 		r.object_type.is_a?(ActiveFacts::Metamodel::ValueType) and
 		!r.fact_type.is_a?(ActiveFacts::Metamodel::TypeInheritance)
