@@ -15,7 +15,7 @@ module ActiveFacts
       def add_surrogate type_name = 'Auto Counter', suffix = 'ID'
         # Find or assert the surrogate value type
         auto_counter = vocabulary.valid_value_type_name(type_name) ||
-          constellation.ValueType(:vocabulary => vocabulary, :name => type_name, :concept => :new)
+          constellation.ValueType(:vocabulary => vocabulary, :name => type_name, :concept => [:new, :implication_rule => 'Surrogate key transform'])
 
         # Create a subtype to identify this entity type:
         vt_name = self.name + ' '+suffix
