@@ -222,7 +222,7 @@ module ActiveFacts
 	      table_role = ref.fact_type.all_role.detect{|r| r.object_type == table}
 	      if table_role
 		remote_table = ref.to
-		while remote_table.absorbed_via
+		while remote_table && remote_table.absorbed_via
 		  absorbed_into = remote_table.absorbed_via.from
 		  remote_table = absorbed_into
 		end
